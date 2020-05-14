@@ -1,0 +1,58 @@
+<?php
+include('config/db_connect.php');
+//wirite all ueries for all pizzas
+$sql = 'SELECT * FROM pizzas';
+
+//make query and get result
+$result = mysqli_query($conn, $sql);
+
+//fetch the resulting rows an array
+$pizzas = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+//free result from memory
+mysqli_free_result($result);
+
+//close connection
+mysqli_close($conn);
+
+//print_r($pizzas);
+//echo $pizzas[0]['email'];
+
+?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YummyPizza</title>
+
+
+</head>
+
+<body>
+    <?php include("templates/header.php") ?>
+    <section>
+        <h3>Hello! your oreder details are:</h3>
+        <?php foreach ($pizzas as $pizza) : ?>
+            <ul>
+                <li>your email id: <?php echo htmlspecialchars($pizza['email']); ?></li>
+                <h5>ingredients are</h5>
+                <?php foreach (explode(',', $pizza['ingredients']) as $ing) { ?>
+                    <ul>
+                        <li><?php echo htmlspecialchars($ing); ?></li>
+                    </ul>
+                <?php } ?>
+            </ul>
+            <div>
+            <a href="details.php?id=<?php echo $pizza['id']; ?>"><h3>more info...</h3></a>
+            </div>
+        <?php endforeach ?>
+
+    </section>
+    <?php include("templates/footer.php") ?>
+</body>
+
+</html>
